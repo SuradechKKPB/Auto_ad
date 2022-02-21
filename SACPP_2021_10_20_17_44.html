@@ -1,0 +1,115 @@
+
+<style> 
+.node circle {
+  fill: #999;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+.node--internal circle {
+  fill: #555;
+}
+
+.node--internal text {
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #555;
+  stroke-opacity: 0.4;
+  stroke-width: 1.5px;
+}
+
+form {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+label {
+  display: block;
+}
+
+ </style>
+<form>
+  <label><input type="radio" name="mode" value="cluster" checked> Dendrogram</label>
+  <label><input type="radio" name="mode" value="tree"> Tree</label>
+</form>
+<svg width="960" height="2400"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script> 
+
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height"),
+        g = svg.append("g").attr("transform", "translate(40,0)");
+    
+    var tree = d3.tree()
+        .size([height - 400, width - 160]);
+    
+    var cluster = d3.cluster()
+        .size([height, width - 160]);
+    
+    var stratify = d3.stratify()
+        .parentId(function(d) { return d.data.name });
+        
+// d3.csv("flare.csv", function(error, data) {
+//   if (error) throw error;
+  var data = {'children': [{'children': [{'children': [{'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2430-SACPP_Condensate Outlet Level Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2210-SACPP_Condensate Level'}, {'children': [], 'name': 'SA-V2210-SACPP_Condensate Outlet Level Control Valve'}], 'name': 'SA-V2210-SACPP_Condensate Outlet Level Control Valve'}], 'name': 'SA-V2430-SACPP_Condensate Outlet Level Control Valve'}, {'children': [{'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2290-SACPP_Oily Water Flow Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2295-SACPP_Differential Pressure 1'}, {'children': [], 'name': 'SA-DC2293_T2293-SACPP_Differential Pressure 1'}], 'name': 'SA-V2295-SACPP_Differential Pressure 1'}], 'name': 'SA-V2295-SACPP_Differential Pressure 1'}, {'children': [{'children': [], 'name': 'SA-V2700-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2065-SACPP_Differential Pressure 1'}, {'children': [], 'name': 'SA-DC2063_T2063-SACPP_Differential Pressure 1'}], 'name': 'SA-V2065-SACPP_Differential Pressure 1'}], 'name': 'SA-V2700-SACPP_Liquid Level'}], 'name': 'SA-V2700-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2650-SACPP_Water Outlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Condensate Outlet Flow Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2290-SACPP_Condensate Outlet Flow Control Valve'}, {'children': [], 'name': 'SA-V2290-SACPP_Condensate Outlet Flow Rate'}], 'name': 'SA-V2290-SACPP_Condensate Outlet Flow Rate'}], 'name': 'SA-V2290-SACPP_Condensate Outlet Flow Rate'}], 'name': 'SA-V2650-SACPP_Water Outlet Flow Rate'}], 'name': 'SA-V2700-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Condensate Outlet Level Control Valve A'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Condensate Outlet Level Control Valve A'}, {'children': [], 'name': 'SA-V2290-SACPP_Condensate Outlet Level Control Valve A'}], 'name': 'SA-V2510-SACPP_Condensate Outlet Level Control Valve A'}], 'name': 'SA-V2510-SACPP_Condensate Outlet Level Control Valve A'}], 'name': 'SA-V2700-SACPP_Liquid Level'}], 'name': 'SA-V2700-SACPP_Liquid Level'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2065-SACPP_Water Outlet Control Valve'}, {'children': [], 'name': 'SA-V2295-SACPP_Water Outlet Control Valve'}], 'name': 'SA-V2295-SACPP_Water Outlet Control Valve'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2450-SACPP_Liquid Level'}, {'children': [], 'name': 'SA-V2450-SACPP_Liquid Level Control Valve'}], 'name': 'SA-V2450-SACPP_Liquid Level Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2430-SACPP_Condensate Level'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2175-SACPP_Vessel Pressure A'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2675-SACPP_Condensate Level'}, {'children': [], 'name': 'SA-V2290-SACPP_Water Level'}], 'name': 'SA-V2675-SACPP_Condensate Level'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Gas Outlet Temperature'}, {'children': [], 'name': 'SA-V2580-SACPP_Condensate Level'}], 'name': 'SA-V2580-SACPP_Condensate Level'}], 'name': 'SA-V2675-SACPP_Condensate Level'}], 'name': 'SA-V2675-SACPP_Condensate Level'}, {'children': [{'children': [], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}, {'children': [], 'name': 'SA-V2920-SACPP_Condensate Level'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2060-SACPP_Total Liquid Level'}, {'children': [], 'name': 'SA-V2060-SACPP_Condensate Level'}], 'name': 'SA-V2060-SACPP_Total Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Condensate Outlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2230-SACPP_Liquid Level Control Valve'}, {'children': [], 'name': 'SA-V2230-SACPP_Liquid Level'}], 'name': 'SA-V2230-SACPP_Liquid Level Control Valve'}], 'name': 'SA-V2230-SACPP_Liquid Level Control Valve'}], 'name': 'SA-V2230-SACPP_Liquid Level Control Valve'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2290-SACPP_Oily Water Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Oily Water Flow Rate'}, {'children': [], 'name': 'SA-V2060-SACPP_Oily Water Flow Control Valve'}], 'name': 'SA-V2060-SACPP_Oily Water Flow Rate'}], 'name': 'SA-V2290-SACPP_Oily Water Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2290-SACPP_Condensate Level'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Condensate Outlet Flow Rate'}, {'children': [], 'name': 'SA-V2510-SACPP_Condensate Outlet Flow Control Valve'}], 'name': 'SA-V2510-SACPP_Condensate Outlet Flow Rate'}], 'name': 'SA-V2510-SACPP_Condensate Outlet Flow Rate'}], 'name': 'SA-V2510-SACPP_Condensate Outlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Gas Outlet Flow Rate'}, {'children': [], 'name': 'SA-V2510-SACPP_Condensate Level'}], 'name': 'SA-V2510-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2510-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2510-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve A'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2650-SACPP_Water Level Control Valve 2'}, {'children': [{'children': [], 'name': 'SA-V2210-SACPP_Gas Outlet Temperature'}, {'children': [], 'name': 'SA-V2230-SACPP_Gas Outlet Temperature'}], 'name': 'SA-V2230-SACPP_Gas Outlet Temperature'}], 'name': 'SA-V2650-SACPP_Water Level Control Valve 2'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2675-SACPP_Blanket Gas Pressure Control Valve'}, {'children': [], 'name': 'SA-V2675-SACPP_Pressure Control Valve to Flare'}], 'name': 'SA-V2675-SACPP_Pressure Control Valve to Flare'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Water Level Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2909-SACPP_Inlet Pressure Control Valve A'}, {'children': [{'children': [], 'name': 'SA-V2300-SACPP_Condensate Outlet Level Control Valve'}, {'children': [], 'name': 'SA-V2510-SACPP_Water Level'}], 'name': 'SA-V2510-SACPP_Water Level'}], 'name': 'SA-V2909-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2909-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2909-SACPP_Inlet Pressure Control Valve A'}], 'name': 'SA-V2909-SACPP_Inlet Pressure Control Valve A'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2510-SACPP_Pressure Control Valve to Flare'}, {'children': [{'children': [], 'name': 'SA-V2580-SACPP_Pressure Control Valve to Flare'}, {'children': [], 'name': 'SA-V2060-SACPP_Pressure Control Valve to Flare'}], 'name': 'SA-V2580-SACPP_Pressure Control Valve to Flare'}], 'name': 'SA-V2580-SACPP_Pressure Control Valve to Flare'}, {'children': [{'children': [], 'name': 'SA-V2290-SACPP_Pressure Control Valve to Flare'}, {'children': [{'children': [], 'name': 'SA-V2250-SACPP_Water Level'}, {'children': [], 'name': 'SA-V2460-SACPP_Water Level'}], 'name': 'SA-V2460-SACPP_Water Level'}], 'name': 'SA-V2460-SACPP_Water Level'}], 'name': 'SA-V2580-SACPP_Pressure Control Valve to Flare'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2168-SACPP_Liquid Level'}, {'children': [], 'name': 'SA-V2388-SACPP_Liquid Level'}], 'name': 'SA-V2388-SACPP_Liquid Level'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2290-SACPP_Gas Outlet Temperature'}, {'children': [{'children': [], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve B'}, {'children': [{'children': [], 'name': 'SA-V2580-SACPP_Water Level Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2720-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2295-SACPP_Differential Pressure Ratio'}, {'children': [], 'name': 'SA-V2650-SACPP_Inlet Pressure'}], 'name': 'SA-V2650-SACPP_Inlet Pressure'}], 'name': 'SA-V2720-SACPP_Liquid Level'}], 'name': 'SA-V2720-SACPP_Liquid Level'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve B'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve B'}, {'children': [{'children': [], 'name': 'SA-V2670-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2700-SACPP_Vessel Pressure A'}, {'children': [], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}], 'name': 'SA-V2920-SACPP_Inlet Pressure Control Valve C'}, {'children': [{'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2700-SACPP_Vessel Temperature'}, {'children': [{'children': [], 'name': 'SA-V2920-SACPP_Gas Outlet Temperature'}, {'children': [{'children': [], 'name': 'SA-V2720-SACPP_Vessel Temperature'}, {'children': [{'children': [], 'name': 'SA-V2580-SACPP_Gas Outlet Temperature'}, {'children': [], 'name': 'SA-V2580-SACPP_Vessel Temperature'}], 'name': 'SA-V2580-SACPP_Vessel Temperature'}], 'name': 'SA-V2720-SACPP_Vessel Temperature'}], 'name': 'SA-V2920-SACPP_Gas Outlet Temperature'}], 'name': 'SA-V2920-SACPP_Gas Outlet Temperature'}, {'children': [{'children': [], 'name': 'SA-V2650-SACPP_Condensate Level'}, {'children': [{'children': [], 'name': 'SA-V2650-SACPP_Water Level'}, {'children': [{'children': [], 'name': 'SA-V2300-SACPP_Condensate Level'}, {'children': [{'children': [], 'name': 'SA-V2980-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2720-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2580-SACPP_Water Level'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Gas Outlet Temperature'}, {'children': [], 'name': 'SA-V2065-SACPP_Differential Pressure Ratio'}], 'name': 'SA-V2065-SACPP_Differential Pressure Ratio'}], 'name': 'SA-V2580-SACPP_Water Level'}], 'name': 'SA-V2720-SACPP_Vessel Pressure A'}], 'name': 'SA-V2980-SACPP_Liquid Level'}], 'name': 'SA-V2980-SACPP_Liquid Level'}], 'name': 'SA-V2980-SACPP_Liquid Level'}], 'name': 'SA-V2980-SACPP_Liquid Level'}], 'name': 'SA-V2980-SACPP_Liquid Level'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}, {'children': [], 'name': 'SA-V2980-SACPP_Inlet Pressure'}], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2930-SACPP_Pressure Control Valve to Flare'}, {'children': [{'children': [], 'name': 'SA-V2300-SACPP_Inlet Temperature'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2460-SACPP_Vessel Temperature'}, {'children': [], 'name': 'SA-V2250-SACPP_Vessel Temperature'}], 'name': 'SA-V2460-SACPP_Vessel Temperature'}, {'children': [{'children': [], 'name': 'SA-V2070-SACPP_Inlet Temperature'}, {'children': [], 'name': 'SA-V2670-SACPP_Differential Pressure'}], 'name': 'SA-V2670-SACPP_Differential Pressure'}], 'name': 'SA-V2670-SACPP_Differential Pressure'}], 'name': 'SA-V2670-SACPP_Differential Pressure'}], 'name': 'SA-V2930-SACPP_Pressure Control Valve to Flare'}], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2670-SACPP_Water Level'}, {'children': [{'children': [], 'name': 'SA-V2580-SACPP_Condensate Outlet Level Control Valve A'}, {'children': [{'children': [], 'name': 'SA-V2545-SACPP_Liquid Level Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2460-SACPP_Gas Outlet Temperature'}, {'children': [], 'name': 'SA-V2430-SACPP_Gas Outlet Temperature'}], 'name': 'SA-V2460-SACPP_Gas Outlet Temperature'}], 'name': 'SA-V2545-SACPP_Liquid Level Control Valve'}], 'name': 'SA-V2580-SACPP_Condensate Outlet Level Control Valve A'}], 'name': 'SA-V2670-SACPP_Water Level'}], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}, {'children': [{'children': [{'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2065-SACPP_Water Outlet Pressure'}, {'children': [], 'name': 'SA-V2065-SACPP_Condensate Outlet Pressure'}], 'name': 'SA-V2065-SACPP_Water Outlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2295-SACPP_Inlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2295-SACPP_Condensate Outlet Pressure'}, {'children': [], 'name': 'SA-V2295-SACPP_Water Outlet Pressure'}], 'name': 'SA-V2295-SACPP_Water Outlet Pressure'}], 'name': 'SA-V2295-SACPP_Water Outlet Pressure'}], 'name': 'SA-V2295-SACPP_Water Outlet Pressure'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-DC2063_T2063-SACPP_Inlet Pressure'}, {'children': [{'children': [], 'name': 'SA-DC2293_T2293-SACPP_Sand Outlet Pressure'}, {'children': [], 'name': 'SA-DC2293_T2293-SACPP_Inlet Pressure'}], 'name': 'SA-DC2293_T2293-SACPP_Sand Outlet Pressure'}], 'name': 'SA-DC2293_T2293-SACPP_Sand Outlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2065-SACPP_Inlet Pressure'}, {'children': [], 'name': 'SA-DC2063_T2063-SACPP_Sand Outlet Pressure'}], 'name': 'SA-V2065-SACPP_Inlet Pressure'}], 'name': 'SA-V2065-SACPP_Inlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2290-SACPP_Inlet Level Control Valve A'}, {'children': [{'children': [], 'name': 'SA-V2290-SACPP_Total Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2175-SACPP_Liquid Level'}, {'children': [], 'name': 'SA-V2060-SACPP_Water Level'}], 'name': 'SA-V2175-SACPP_Liquid Level'}], 'name': 'SA-V2290-SACPP_Total Liquid Level'}], 'name': 'SA-V2290-SACPP_Total Liquid Level'}], 'name': 'SA-V2290-SACPP_Total Liquid Level'}], 'name': 'SA-V2295-SACPP_Water Outlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Gas Outlet Pressure Control Valve'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2545-SACPP_Liquid Level'}, {'children': [], 'name': 'SA-V2175-SACPP_Vessel Temperature'}], 'name': 'SA-V2545-SACPP_Liquid Level'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2070-SACPP_Condensate Level'}, {'children': [], 'name': 'SA-V2060-SACPP_Inlet Level Control Valve A'}], 'name': 'SA-V2070-SACPP_Condensate Level'}, {'children': [{'children': [], 'name': 'SA-V2670-SACPP_Water Level Control Valve'}, {'children': [], 'name': 'SA-V2177-SACPP_Liquid Level'}], 'name': 'SA-V2670-SACPP_Water Level Control Valve'}], 'name': 'SA-V2670-SACPP_Water Level Control Valve'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2580-SACPP_Gas Outlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Gas Outlet Flow Rate'}, {'children': [], 'name': 'SA-V2290-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2290-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2580-SACPP_Gas Outlet Flow Rate'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2250-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2070-SACPP_Inlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2070-SACPP_Gas Outlet Flow Rate'}, {'children': [], 'name': 'SA-V2250-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2250-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2250-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2250-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2070-SACPP_Inlet Pressure'}, {'children': [], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}], 'name': 'SA-V2909-SACPP_Condensate Level'}, {'children': [{'children': [{'children': [{'children': [], 'name': 'SA-V2675-SACPP_Gas Outlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2675-SACPP_Water Level 2'}, {'children': [], 'name': 'SA-V2675-SACPP_Water Level'}], 'name': 'SA-V2675-SACPP_Water Level 2'}], 'name': 'SA-V2675-SACPP_Water Level 2'}, {'children': [{'children': [], 'name': 'SA-V2650-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2920-SACPP_Inlet Pressure'}, {'children': [], 'name': 'SA-V2920-SACPP_Gas Outlet Pressure'}], 'name': 'SA-V2920-SACPP_Inlet Pressure'}], 'name': 'SA-V2920-SACPP_Inlet Pressure'}], 'name': 'SA-V2920-SACPP_Inlet Pressure'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2930-SACPP_Vessel Pressure A'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2580-SACPP_Gas Outlet Pressure Control Valve'}, {'children': [{'children': [], 'name': 'SA-V2510-SACPP_Gas Outlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2580-SACPP_Vessel Pressure'}, {'children': [], 'name': 'SA-V2580-SACPP_Gas Outlet Pressure'}], 'name': 'SA-V2580-SACPP_Vessel Pressure'}], 'name': 'SA-V2580-SACPP_Vessel Pressure'}], 'name': 'SA-V2580-SACPP_Vessel Pressure'}, {'children': [{'children': [], 'name': 'SA-V2909-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2060-SACPP_Vessel Pressure'}, {'children': [], 'name': 'SA-V2290-SACPP_Vessel Pressure'}], 'name': 'SA-V2290-SACPP_Vessel Pressure'}], 'name': 'SA-V2909-SACPP_Vessel Pressure A'}], 'name': 'SA-V2909-SACPP_Vessel Pressure A'}], 'name': 'SA-V2930-SACPP_Vessel Pressure A'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2300-SACPP_Inlet Pressure'}, {'children': [{'children': [], 'name': 'SA-V2920-SACPP_Gas Outlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2300-SACPP_Gas Outlet Flow Rate'}, {'children': [{'children': [], 'name': 'SA-V2300-SACPP_Inlet Flow Rate'}, {'children': [], 'name': 'SA-V2460-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2460-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2460-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2920-SACPP_Gas Outlet Flow Rate'}], 'name': 'SA-V2920-SACPP_Gas Outlet Flow Rate'}, {'children': [{'children': [{'children': [], 'name': 'SA-V2230-SACPP_Vessel Pressure A'}, {'children': [], 'name': 'SA-V2210-SACPP_Vessel Pressure A'}], 'name': 'SA-V2230-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2930-SACPP_Liquid Level'}, {'children': [{'children': [], 'name': 'SA-V2460-SACPP_Vessel Pressure A'}, {'children': [{'children': [], 'name': 'SA-V2430-SACPP_Vessel Pressure A'}, {'children': [], 'name': 'SA-V2450-SACPP_Vessel Pressure A'}], 'name': 'SA-V2450-SACPP_Vessel Pressure A'}], 'name': 'SA-V2460-SACPP_Vessel Pressure A'}], 'name': 'SA-V2930-SACPP_Liquid Level'}], 'name': 'SA-V2930-SACPP_Liquid Level'}], 'name': 'SA-V2930-SACPP_Liquid Level'}], 'name': 'SA-V2930-SACPP_Vessel Pressure A'}], 'name': 'SA-V2930-SACPP_Vessel Pressure A'}], 'name': 'SA-V2930-SACPP_Vessel Pressure A'}], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}], 'name': 'SA-V2980-SACPP_Vessel Pressure A'}], 'name': 'Root1'}
+
+  var root = d3.hierarchy(data)
+        .sort((a, b) => d3.descending(a.height, b.height) || d3.ascending(a.data.name, b.data.name));
+    
+        cluster(root);
+
+        var link = g.selectAll(".link")
+            .data(root.descendants().slice(1))
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", diagonal);
+
+        var node = g.selectAll(".node")
+            .data(root.descendants())
+            .enter().append("g")
+            .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+    
+        node.append("circle")
+            .attr("r", 2.5);
+    
+        node.append("text")
+            .attr("dy", 3)
+            .attr("x", function(d) { return d.children ? -8 : 8; })
+            .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+            .text(function(d) { return d.data.name; });
+    
+        d3.selectAll("input")
+      .on("change", changed);
+
+      var timeout = setTimeout(function() {
+         d3.select("input[value=\"tree\"]")
+            .property("checked", true)
+            .dispatch("change");
+      }, 1000);
+    
+      function changed() {
+        timeout = clearTimeout(timeout);
+        (this.value === "tree" ? tree : cluster)(root);
+        var t = d3.transition().duration(750);
+        node.transition(t).attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+        link.transition(t).attr("d", diagonal);
+        }
+
+      function diagonal(d) {
+        return "M" + d.y + "," + d.x
+            + "C" + (d.parent.y + 100) + "," + d.x
+            + " " + (d.parent.y + 100) + "," + d.parent.x
+            + " " + d.parent.y + "," + d.parent.x;
+        }
+//});
+
+ </script>
